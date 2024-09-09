@@ -2,7 +2,7 @@
 const char* AP_SSID = "Shuteng";
 const char* AP_PWD  = "12345678";
 
-// WIFI_STA settings.
+// WIFI_STA settings. (Target wifi needs to satisfy - "2.4GHz" && "WPA2")
 const char* STA_SSID = "Shuteng";
 const char* STA_PWD  = "12345678";
 
