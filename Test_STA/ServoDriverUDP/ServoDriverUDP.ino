@@ -164,6 +164,7 @@ void loop() {
 void setRGBColor(int r, int g, int b) {
   // Implement your RGB LED control here
   setSingleLED(0, matrix.Color(r, g, b));
+  setSingleLED(1, matrix.Color(r, g, b));
   Serial.printf("Setting RGB to: %d,%d,%d\n", r, g, b);
 }
 
