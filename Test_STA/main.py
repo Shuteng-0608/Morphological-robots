@@ -2,9 +2,8 @@ import socket
 
 # List of ESP32 IP addresses
 ESP32_IPS = [
-    "192.168.1.100",
-    "192.168.1.101",
-    "192.168.1.102"
+    "192.168.4.1",
+    "192.168.4.2",
 ]
 UDP_PORT = 12345
 
@@ -22,5 +21,5 @@ def control_all_boards(r, g, b):
         set_rgb_color(ip, r, g, b)
 
 # Example usage
-# control_all_boards(0, 255, 0)  # Set RGB LED to green on all boards
-set_rgb_color("192.168.4.3",0, 255, 0)
+control_all_boards(0, 255, 0)  # Set RGB LED to green on all boards
+# set_rgb_color("192.168.4.2",0, 255, 0)
