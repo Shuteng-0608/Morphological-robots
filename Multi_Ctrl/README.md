@@ -2,7 +2,7 @@
 
 ### Description:
 
-The Web app example for Servo Driver with ESP32.
+The UDP set-up for Servo Driver with ESP32.
 
 ### Website:
 
