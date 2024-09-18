@@ -32,13 +32,20 @@ def position_down(ip):
 
 def control_all_boards(r, g, b):
     for ip in ESP32_IPS:
-        set_rgb_color(ip, r, g, b)
-        send_cmd_message(ip, 0, 0, 0, 0)
+        pass
+        # set_rgb_color(ip, r, g, b)
+        # send_cmd_message(ip, 0, 0, 0, 0)
+
+
+def write_pos_ex(ip, ID, pos, vel, acc):
+    message = f"WritePosEx {ID},{pos},{vel},{acc}"
+    send_udp_message(ip, UDP_PORT, message)
 
 # Example usage
+write_pos_ex("192.168.4.2", 1, 2000, 4000, 100)
 # control_all_boards(0, 255, 0)  # Set RGB LED to green on all boards
-send_cmd_message("192.168.4.2", 1, 5, 0, 0) # position +
-send_cmd_message("192.168.4.2", 1, 6, 0, 0) # position -
+# send_cmd_message("192.168.4.2", 1, 5, 0, 0) # position +
+# send_cmd_message("192.168.4.2", 1, 6, 0, 0) # position -
 # position_up("192.168.4.2")
 # position_down("192.168.4.2")
 # set_rgb_color("192.168.4.2",0, 255, 0)
