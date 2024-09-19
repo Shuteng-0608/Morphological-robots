@@ -47,12 +47,23 @@ void handleUdp(){
       setRGBColor(r, g, b);
     }
 
+    
+    if(message.startsWith("WritePosEx")){
+      int id, pos, vel, acc;
+      sscanf(message.c_str(), "WritePosEx %d,%d,%d,%d", &id, &pos, &vel, &acc);
+      st.WritePosEx(id, pos, vel, acc);
+    }
+    
     if(message.startsWith("Position+")){
-      st.WritePosEx(listID[activeNumInList], ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);
+      int id;
+      sscanf(message.c_str(), "Position+ %d", &id);
+      st.WritePosEx(id, ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);
     }
     
     if(message.startsWith("Position-")){
-      st.WritePosEx(listID[activeNumInList], 0, activeServoSpeed, ServoInitACC_ST);
+      int id;
+      sscanf(message.c_str(), "Position- %d", &id);
+      st.WritePosEx(id, 0, activeServoSpeed, ServoInitACC_ST);
     }
 
     // message format: "CMD cmdT,cmdI,cmdA,cmdB"

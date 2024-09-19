@@ -23,21 +23,11 @@ void activeID(int cmdInput){
 
 void activeSpeed(int cmdInput){
   activeServoSpeed += cmdInput;
-  if(ServoType[listID[activeNumInList]] == 9){
-    if (activeServoSpeed > ServoMaxSpeed_ST){
-      activeServoSpeed = ServoMaxSpeed_ST;
-    }
-    else if(activeServoSpeed < 0){
-      activeServoSpeed = 0;
-    }
+  if (activeServoSpeed > ServoMaxSpeed_ST){
+    activeServoSpeed = ServoMaxSpeed_ST;
   }
-  else if(ServoType[listID[activeNumInList]] == 5){
-    if (activeServoSpeed > ServoMaxSpeed_SC){
-      activeServoSpeed = ServoMaxSpeed_SC;
-    }
-    else if(activeServoSpeed < 0){
-      activeServoSpeed = 0;
-    }
+  else if(activeServoSpeed < 0){
+    activeServoSpeed = 0;
   }
 }
 
@@ -63,78 +53,30 @@ void activeCtrl(int cmdInput,int cmdA, int cmdB){
   Serial.println(ServoType[1]);
   Serial.println("---   ---   ---");
   switch(cmdInput){
-    case 1:
-      if(ServoType[listID[activeNumInList]] == 9){
-        st.WritePosEx(listID[activeNumInList], ServoDigitalMiddle_ST, activeServoSpeed, ServoInitACC_ST);break;
-      }
-      else if(ServoType[listID[activeNumInList]] == 5){
-        sc.WritePos(listID[activeNumInList], ServoDigitalMiddle_SC, 0, activeServoSpeed);break;
-      }
-
-
-    case 2:
-      servoStop(listID[activeNumInList]);
-      break;
-
-
+    case 1:st.WritePosEx(listID[activeNumInList], ServoDigitalMiddle_ST, activeServoSpeed, ServoInitACC_ST);break;
+    
+    case 2:servoStop(listID[activeNumInList]);break;
+    
     case 3:servoTorque(listID[activeNumInList],0);Torque_List[activeNumInList] = false;break;
-
-
     case 4:servoTorque(listID[activeNumInList],1);Torque_List[activeNumInList] = true;break;
-
-
-    case 5:
-      if(modeRead[listID[activeNumInList]] == 0){
-//        if(ServoType[listID[activeNumInList]] == 9){
-//          st.WritePosEx(listID[activeNumInList], ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);
-//        }
-//        else if(ServoType[listID[activeNumInList]] == 5){
-//          sc.WritePosEx(listID[activeNumInList], ServoDigitalRange_SC - MAX_MIN_OFFSET, activeServoSpeed, ServoInitACC_SC);
-//        }
-        st.WritePosEx(listID[activeNumInList], ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);
-      }
-
-      else if(modeRead[listID[activeNumInList]] == 3){
-//        if(ServoType[listID[activeNumInList]] == 9){
-//          st.WritePosEx(listID[activeNumInList], 30000, activeServoSpeed, ServoInitACC_ST);
-//        }
-//        else if(ServoType[listID[activeNumInList]] == 5){
-//          sc.WritePos(listID[activeNumInList], 30000, 0, activeServoSpeed);
-//        }
-        st.WritePosEx(listID[activeNumInList], 30000, activeServoSpeed, ServoInitACC_ST);
-      }
-      break;
-
-
-    case 6:
-      if(modeRead[listID[activeNumInList]] == 0){
-        if(ServoType[listID[activeNumInList]] == 9){
-          st.WritePosEx(listID[activeNumInList], 0, activeServoSpeed, ServoInitACC_ST);
-        }
-        else if(ServoType[listID[activeNumInList]] == 5){
-          sc.WritePos(listID[activeNumInList], MAX_MIN_OFFSET, 0, activeServoSpeed);
-        }
-      }
-      else if(modeRead[listID[activeNumInList]] == 3){
-        if(ServoType[listID[activeNumInList]] == 9){
-          st.WritePosEx(listID[activeNumInList], -30000, activeServoSpeed, ServoInitACC_ST);
-        }
-        else if(ServoType[listID[activeNumInList]] == 5){
-          sc.WritePos(listID[activeNumInList], -30000, 0, activeServoSpeed);
-        }
-      }
-      break;
-
-
+    
+    case 5:st.WritePosEx(listID[activeNumInList], ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);break;
+    case 6:st.WritePosEx(listID[activeNumInList], 0, activeServoSpeed, ServoInitACC_ST);break;
+    
     case 7:activeSpeed(100);break;
     case 8:activeSpeed(-100);break;
+    
     case 9:servotoSet += 1;if(servotoSet > 250){servotoSet = 0;}break;
     case 10:servotoSet -= 1;if(servotoSet < 0){servotoSet = 0;}break;
+    
     case 11:setMiddle(listID[activeNumInList]);break;
+    
     case 12:setMode(listID[activeNumInList], 0);break;
     case 13:setMode(listID[activeNumInList], 3);break;
+    
     case 14:SERIAL_FORWARDING = true;break;
     case 15:SERIAL_FORWARDING = false;break;
+    
     case 16:setID(listID[activeNumInList], servotoSet);break;
 
     case 17:DEV_ROLE = 0;break;

@@ -63,26 +63,25 @@ int stsRead;
 
 
 void getFeedBack(byte servoID){
-  if(ServoType[servoID]==9){
-    if(st.FeedBack(servoID)!=-1){
-      posRead[servoID] = st.ReadPos(-1);
-      speedRead[servoID] = st.ReadSpeed(-1);
-      loadRead[servoID] = st.ReadLoad(-1);
-      voltageRead[servoID] = st.ReadVoltage(-1);
-      currentRead[servoID] = st.ReadCurrent(-1);
-      temperRead[servoID] = st.ReadTemper(-1);
-      modeRead[servoID] = st.ReadMode(servoID);
-    }else{
-      if(serialFeedback){Serial.println("FeedBack err");}
-    }
+  
+  if(st.FeedBack(servoID)!=-1){
+    posRead[servoID] = st.ReadPos(-1);
+    speedRead[servoID] = st.ReadSpeed(-1);
+    loadRead[servoID] = st.ReadLoad(-1);
+    voltageRead[servoID] = st.ReadVoltage(-1);
+    currentRead[servoID] = st.ReadCurrent(-1);
+    temperRead[servoID] = st.ReadTemper(-1);
+    modeRead[servoID] = st.ReadMode(servoID);
+  }else{
+    if(serialFeedback){Serial.println("FeedBack err");}
   }
+  
 
 }
 
 
 void servoInit(){
   Serial1.begin(1000000, SERIAL_8N1, S_RXD, S_TXD);
-  sc.pSerial = &Serial1;
   st.pSerial = &Serial1;
   while(!Serial1) {}
 
@@ -94,26 +93,16 @@ void servoInit(){
 
 
 void setMiddle(byte InputID){
-  if(ServoType[InputID]==9){
-    st.CalibrationOfs(InputID);
-  }
+  st.CalibrationOfs(InputID);
 }
 
 
 void setMode(byte InputID, byte InputMode){
   if(InputMode == 0){
-    if(ServoType[InputID] == 9){
-      st.unLockEprom(InputID);
-      st.writeWord(InputID, 11, 4095);
-      st.writeByte(InputID, SMS_STS_MODE, InputMode);
-      st.LockEprom(InputID);
-    }
-    else if(ServoType[InputID] == 5){
-      sc.unLockEprom(InputID);
-      sc.writeWord(InputID, SCSCL_MIN_ANGLE_LIMIT_L, 20);
-      sc.writeWord(InputID, SCSCL_MAX_ANGLE_LIMIT_L, 1003);
-      sc.LockEprom(InputID);
-    }
+    st.unLockEprom(InputID);
+    st.writeWord(InputID, 11, 4095);
+    st.writeByte(InputID, SMS_STS_MODE, InputMode);
+    st.LockEprom(InputID);
   }
 
   else if(InputMode == 3){
@@ -165,10 +154,5 @@ void servoStop(byte servoID){
 
 
 void servoTorque(byte servoID, u8 enableCMD){
-  if(ServoType[servoID] == 9){
-    st.EnableTorque(servoID, enableCMD);
-  }
-  else if(ServoType[servoID] == 5){
-    sc.EnableTorque(servoID, enableCMD);
-  }
+  st.EnableTorque(servoID, enableCMD);
 }
