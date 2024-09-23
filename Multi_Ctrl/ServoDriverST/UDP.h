@@ -6,7 +6,7 @@
 WiFiUDP Udp;
 const int udpPort = 12345; // Port number for UDP communication
 
-void setRGBColor(int r, int g, int b); // Control all LED light on board
+void setRGBColor(byte r, byte g, byte b); // Control all LED light on board
 
 // Set board as STA
 // Connect to know wifi (Target wifi needs to satisfy - "2.4GHz" && "WPA2")
