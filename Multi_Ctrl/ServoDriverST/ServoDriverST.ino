@@ -108,10 +108,10 @@ void setup() {
   RGBcolor(0, 64, 255);
 
   servoInit();
-//
+
 //  wifiInit();
 
-  webServerSetup();
+  // webServerSetup();
 
   RGBoff();
 
