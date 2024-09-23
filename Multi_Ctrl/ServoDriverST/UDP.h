@@ -3,6 +3,13 @@
 #include <ArduinoJson.h>
 #include <stdint.h>
 
+typedef char s8;
+typedef unsigned char u8; 
+typedef unsigned short u16; 
+typedef short s16;
+typedef unsigned long u32;  
+typedef long s32;
+
 WiFiUDP Udp;
 const int udpPort = 12345; // Port number for UDP communication
 
@@ -52,7 +59,7 @@ void handleUdp(){
     const char* cmd = doc["Cmd"];  
     
     if(strcmp(cmd, "RGB") == 0){
-      uint8_t id = doc["ID"];
+      u8 id = doc["ID"];
       byte r = doc["R"];
       byte g = doc["G"];
       byte b = doc["B"];
@@ -60,18 +67,19 @@ void handleUdp(){
     }
 
     else if(strcmp(cmd, "WritePosEx") == 0){
-      uint8_t id = doc["ID"];
-      int16_t pos = doc["pos"];
-      uint16_t vel = doc["vel"];
-      uint8_t acc = doc["acc"];
+      u8 id = doc["ID"];
+      s16 pos = doc["pos"];
+      u16 vel = doc["vel"];
+      u8 acc = doc["acc"];
+      // WritePosEx(u8 ID, s16 Position, u16 Speed, u8 ACC = 0);
       st.WritePosEx(id, pos, vel, acc);
     }
 
     else if(strcmp(cmd, "RegWritePosEx") == 0){
-      uint8_t id = doc["ID"];
-      int16_t pos = doc["pos"];
-      uint16_t vel = doc["vel"];
-      uint8_t acc = doc["acc"];
+      u8 id = doc["ID"];
+      s16 pos = doc["pos"];
+      u16 vel = doc["vel"];
+      u8 acc = doc["acc"];
       // RegWritePosEx(u8 ID, s16 Position, u16 Speed, u8 ACC = 0);
       st.RegWritePosEx(id, pos, vel, acc);
     }
@@ -88,23 +96,23 @@ void handleUdp(){
       uint16_t velArray[vel_list.size()];
       uint8_t accArray[acc_list.size()];
       
-      for (int i = 0; i < ID_list.size(); i++) IDArray[i] = ID_list[i].as<uint8_t>();
-      for (int i = 0; i < pos_list.size(); i++) posArray[i] = pos_list[i].as<int16_t>();  
-      for (int i = 0; i < vel_list.size(); i++) velArray[i] = vel_list[i].as<uint16_t>();  
-      for (int i = 0; i < acc_list.size(); i++) accArray[i] = acc_list[i].as<uint8_t>();   
+      for (int i = 0; i < ID_list.size(); i++) IDArray[i] = ID_list[i].as<u8>();
+      for (int i = 0; i < pos_list.size(); i++) posArray[i] = pos_list[i].as<s16>();  
+      for (int i = 0; i < vel_list.size(); i++) velArray[i] = vel_list[i].as<u16>();  
+      for (int i = 0; i < acc_list.size(); i++) accArray[i] = acc_list[i].as<u8>();   
       // SyncWritePosEx(u8 ID[], u8 IDN, s16 Position[], u16 Speed[], u8 ACC[]);
       st.SyncWritePosEx(IDArray, IDNum, posArray, velArray, accArray);
     }
 
     
     else if(strcmp(cmd, "Position+") == 0){
-      uint8_t id = doc["ID"];
+      u8 id = doc["ID"];
       // WritePosEx(u8 ID, s16 Position, u16 Speed, u8 ACC = 0);
       st.WritePosEx(id, ServoDigitalRange_ST - 1, activeServoSpeed, ServoInitACC_ST);
     }
     
     else if(strcmp(cmd, "Position-") == 0){
-      uint8_t id = doc["ID"];
+      u8 id = doc["ID"];
       // WritePosEx(u8 ID, s16 Position, u16 Speed, u8 ACC = 0);
       st.WritePosEx(id, 0, activeServoSpeed, ServoInitACC_ST);
     }  
