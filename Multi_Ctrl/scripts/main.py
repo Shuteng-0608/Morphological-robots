@@ -119,7 +119,7 @@ def get_state(ID):
     while True:
         try:
             data, addr = sock.recvfrom(1024)
-            ip_address, port = addr  # 解包地址和端口
+            ip_address, port = addr
             print(f"Received message: {data.decode()} from IP: {ip_address}, Port: {port}")
             return int(data.decode())
         except KeyboardInterrupt:
