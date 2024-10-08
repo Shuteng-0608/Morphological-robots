@@ -87,6 +87,8 @@ int    WIFI_RSSI;
 #include "UDP.h"
 
 
+
+
 void setup() {
   Serial.begin(115200);
   while(!Serial) {}
@@ -99,19 +101,19 @@ void setup() {
   
   InitRGB();
 
-  espNowInit();
+//  espNowInit();
 
-  getMAC();
+//  getMAC();
   
   boardDevInit();
 
   RGBcolor(0, 64, 255);
 
   servoInit();
-
+//
 //  wifiInit();
 
-  // webServerSetup();
+//  webServerSetup();
 
   RGBoff();
 
@@ -119,6 +121,8 @@ void setup() {
   pingAll(true);
 
   threadInit();
+  
+
 }
 
 

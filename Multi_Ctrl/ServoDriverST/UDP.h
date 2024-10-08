@@ -12,12 +12,16 @@ typedef long s32;
 
 WiFiUDP Udp;
 const int udpPort = 12345; // Port number for UDP communication
+IPAddress local_ip(192, 168, 4, 5); // static local IP   
+IPAddress gateway(192, 168, 4, 1); // AP    
+IPAddress subnet(255, 255, 255, 0);
 
 void setRGBColor(byte r, byte g, byte b); // Control all LED light on board
 
 // Set board as STA
 // Connect to know wifi (Target wifi needs to satisfy - "2.4GHz" && "WPA2")
 void wifiConnect(){
+  WiFi.config(local_ip, gateway, subnet);
   WiFi.begin(STA_SSID, STA_PWD);
 
   while(WiFi.status() != WL_CONNECTED){
@@ -115,7 +119,36 @@ void handleUdp(){
       u8 id = doc["ID"];
       // WritePosEx(u8 ID, s16 Position, u16 Speed, u8 ACC = 0);
       st.WritePosEx(id, 0, activeServoSpeed, ServoInitACC_ST);
-    }  
+    }
+
+    else if(strcmp(cmd, "State") == 0){ 
+      int id = doc["ID"];
+      // int ReadPos(int ID);
+      int pos = st.ReadPos(id); 
+      
+      Serial.println(WiFi.localIP());
+      Serial.print("MAC Address: ");
+      Serial.println(WiFi.macAddress()); 
+      Serial.print("Position read: ");
+      Serial.println(pos);
+      if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("Wi-Fi is connected.");
+        if (Udp.beginPacket("192.168.4.10", 12345) == 1) {
+          Serial.print("Sending position: ");
+          Serial.println(pos);
+          Udp.print(pos);
+          if (Udp.endPacket() == 1) {
+            Serial.println("Message sent successfully.");
+          } else {
+            Serial.println("Failed to send message.");
+          }
+        } else {
+          Serial.println("Failed to begin packet.");
+        }
+      } else {
+        Serial.println("Wi-Fi not connected.");
+      }
+    }
   }
 }
 

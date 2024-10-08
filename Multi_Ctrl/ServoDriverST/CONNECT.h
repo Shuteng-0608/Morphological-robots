@@ -197,14 +197,14 @@ void getIP(){
 }
 
 
-void setAP(){
-  WiFi.softAP(AP_SSID, AP_PWD);
-  IPAddress myIP = WiFi.softAPIP();
-  IP_ADDRESS = myIP;
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
-  WIFI_MODE = 1;
-}
+//void setAP(){
+//  WiFi.softAP(AP_SSID, AP_PWD);
+//  IPAddress myIP = WiFi.softAPIP();
+//  IP_ADDRESS = myIP;
+//  Serial.print("AP IP address: ");
+//  Serial.println(myIP);
+//  WIFI_MODE = 1;
+//}
 
 
 void setSTA(){
@@ -227,12 +227,12 @@ void getWifiStatus(){
 }
 
 
-void wifiInit(){
-  DEV_ROLE  = DEFAULT_ROLE;
-  WIFI_MODE = DEFAULT_WIFI_MODE;
-  if(WIFI_MODE == 1){setAP();}
-  else if(WIFI_MODE == 2){setSTA();}
-}
+//void wifiInit(){
+//  DEV_ROLE  = DEFAULT_ROLE;
+//  WIFI_MODE = DEFAULT_WIFI_MODE;
+//  if(WIFI_MODE == 1){setAP();}
+//  else if(WIFI_MODE == 2){setSTA();}
+//}
 
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
