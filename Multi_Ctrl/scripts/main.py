@@ -10,17 +10,17 @@ ESP32_IPS = [
 ]
 
 ID_IP_table = {
-    1: '192.168.4.2',
-    2: '192.168.4.2',
-    3: '192.168.4.2',
-    4: '192.168.4.3',
-    5: '192.168.4.3',
-    6: '192.168.4.3',
+    1: '192.168.4.5',
+    2: '192.168.4.5',
+    3: '192.168.4.5',
+    4: '192.168.4.4',
+    5: '192.168.4.4',
+    6: '192.168.4.4',
 }
 
 IP_IDList_table = {
-    '192.168.4.2': [1, 2, 3],
-    '192.168.4.3': [4, 5, 6]
+    '192.168.4.5': [1, 2, 3],
+    '192.168.4.4': [4, 5, 6]
 }
 
 
@@ -103,9 +103,63 @@ def sync_write_pos_ex(ip, pos_list, vel_list, acc_list):
     json_message = json.dumps(message)
     send_udp_message(ip, UDP_PORT, json_message)
 
+def get_state(ID):
+    message = {
+        'Cmd': "State",
+        'ID': ID
+    }
+    ip = query_ip_by_id(ID)
+    json_message = json.dumps(message)
+    # send_udp_message(ip, UDP_PORT, json_message)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(("192.168.4.10", 12345))
+    sock.sendto(json_message.encode(), (ip, UDP_PORT))
+
+    print("Cmd sent")
+    while True:
+        try:
+            data, addr = sock.recvfrom(1024)
+            ip_address, port = addr  # 解包地址和端口
+            print(f"Received message: {data.decode()} from IP: {ip_address}, Port: {port}")
+            return int(data.decode())
+        except KeyboardInterrupt:
+            print("Exiting...")
+            break
+    sock.close()
+
 # Example usage
-write_pos_ex(1, 2000, 4000, 100)
+# write_pos_ex(1, 0, 4000, 100)
+# sync_write_pos_ex("192.168.4.2", [1000, 1000, 1000], [4000, 4000, 4000], [100, 100, 100])
 # control_all_boards(0, 255, 0)  # Set RGB LED to green on all boards
-# position_up("192.168.4.2", 1)
+# position_up(1)
 # position_down("192.168.4.2", 2)
 # set_rgb_color("192.168.4.2",0, 255, 0)
+print(get_state(1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
