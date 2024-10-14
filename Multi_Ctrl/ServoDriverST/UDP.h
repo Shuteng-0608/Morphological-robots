@@ -121,33 +121,46 @@ void handleUdp(){
       st.WritePosEx(id, 0, activeServoSpeed, ServoInitACC_ST);
     }
 
+    else if(strcmp(cmd, "EnableTorque") == 0){
+      JsonArray ID_list = doc["ID_list"];
+      u8 enable = doc["Enable"];
+      // EnableTorque(u8 ID, u8 Enable)
+      for (int i = 0; i < ID_list.size(); i++) st.EnableTorque(ID_list[i].as<u8>(), enable);
+    }
+    else if(strcmp(cmd, "SetTorque") == 0){
+      JsonArray ID_list = doc["ID_list"];
+      JsonArray NewTorque_list = doc["NewTorque_list"];
+      for (int i = 0; i < ID_list.size(); i++) st.SetTorque(ID_list[i].as<u8>(), NewTorque_list[i].as<u16>());
+    }
+
     else if(strcmp(cmd, "State") == 0){ 
       int id = doc["ID"];
-      // int ReadPos(int ID);
       int pos = st.ReadPos(id); 
-      
-      Serial.println(WiFi.localIP());
-      Serial.print("MAC Address: ");
-      Serial.println(WiFi.macAddress()); 
-      Serial.print("Position read: ");
-      Serial.println(pos);
-      if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("Wi-Fi is connected.");
-        if (Udp.beginPacket("192.168.4.10", 12345) == 1) {
-          Serial.print("Sending position: ");
-          Serial.println(pos);
-          Udp.print(pos);
-          if (Udp.endPacket() == 1) {
-            Serial.println("Message sent successfully.");
-          } else {
-            Serial.println("Failed to send message.");
-          }
-        } else {
-          Serial.println("Failed to begin packet.");
-        }
-      } else {
-        Serial.println("Wi-Fi not connected.");
-      }
+      Udp.beginPacket("192.168.4.10", 12345);
+      Udp.print(pos);
+      Udp.endPacket();
+//      Serial.println(WiFi.localIP());
+//      Serial.print("MAC Address: ");
+//      Serial.println(WiFi.macAddress()); 
+//      Serial.print("Position read: ");
+//      Serial.println(pos);
+//      if (WiFi.status() == WL_CONNECTED) {
+//        Serial.println("Wi-Fi is connected.");
+//        if (Udp.beginPacket("192.168.4.10", 12345) == 1) {
+//          Serial.print("Sending position: ");
+//          Serial.println(pos);
+//          Udp.print(pos);
+//          if (Udp.endPacket() == 1) {
+//            Serial.println("Message sent successfully.");
+//          } else {
+//            Serial.println("Failed to send message.");
+//          }
+//        } else {
+//          Serial.println("Failed to begin packet.");
+//        }
+//      } else {
+//        Serial.println("Wi-Fi not connected.");
+//      }
     }
   }
 }
