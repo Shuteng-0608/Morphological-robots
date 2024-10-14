@@ -130,6 +130,7 @@ void handleUdp(){
     else if(strcmp(cmd, "SetTorque") == 0){
       JsonArray ID_list = doc["ID_list"];
       JsonArray NewTorque_list = doc["NewTorque_list"];
+      // SetTorque(u8 ID, u16 NewTorque)
       for (int i = 0; i < ID_list.size(); i++) st.SetTorque(ID_list[i].as<u8>(), NewTorque_list[i].as<u16>());
     }
 
