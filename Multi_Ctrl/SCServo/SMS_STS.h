@@ -66,6 +66,7 @@ public:
 	virtual int WheelMode(u8 ID);//恒速模式
 	virtual int WriteSpe(u8 ID, s16 Speed, u8 ACC = 0);//恒速模式控制指令
 	virtual int EnableTorque(u8 ID, u8 Enable);//扭力控制指令
+	virtual void SetTorque(u8 ID, u16 NewTorque); // 设定扭力限制
 	virtual int unLockEprom(u8 ID);//eprom解锁
 	virtual int LockEprom(u8 ID);//eprom加锁
 	virtual int CalibrationOfs(u8 ID);//中位校准

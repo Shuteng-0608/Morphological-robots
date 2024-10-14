@@ -100,6 +100,15 @@ int SMS_STS::EnableTorque(u8 ID, u8 Enable)
 	return writeByte(ID, SMS_STS_TORQUE_ENABLE, Enable);
 }
 
+void SMS_STS::SetTorque(u8 ID, u16 NewTorque)
+{
+    u8 lowByte = NewTorque & 0xFF;       // 获取低字节
+    u8 highByte = (NewTorque >> 8) & 0xFF; // 获取高字节
+    writeWord(ID, SMS_STS_TORQUE_LIMIT_L, lowByte);
+    writeWord(ID, SMS_STS_TORQUE_LIMIT_H, highByte);
+}
+
+
 int SMS_STS::unLockEprom(u8 ID)
 {
 	return writeByte(ID, SMS_STS_LOCK, 0);
