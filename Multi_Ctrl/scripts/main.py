@@ -1,5 +1,7 @@
 import json
 import socket
+import cProfile
+import timeit
 
 # List of ESP32 IP addresses
 ESP32_IPS = [
@@ -115,17 +117,49 @@ def get_state(ID):
     sock.bind(("192.168.4.10", 12345))
     sock.sendto(json_message.encode(), (ip, UDP_PORT))
 
-    print("Cmd sent")
+    # print("Cmd sent")
     while True:
         try:
             data, addr = sock.recvfrom(1024)
-            ip_address, port = addr
-            print(f"Received message: {data.decode()} from IP: {ip_address}, Port: {port}")
+            ip_address, port = addr 
+            # print(f"Received message: {data.decode()} from IP: {ip_address}, Port: {port}")
             return int(data.decode())
         except KeyboardInterrupt:
             print("Exiting...")
             break
     sock.close()
+
+def enable_torque(ip, Enable):
+    message = {
+        'Cmd': "EnableTorque",
+        'ID_list': query_id_list_by_ip(ip),
+        'Enable': Enable
+    }
+    json_message = json.dumps(message)
+    send_udp_message(ip, UDP_PORT, json_message)
+
+def set_torque(ip, newTorque_list):
+
+    message = {
+        'Cmd': "SetTorque",
+        'ID_list': query_id_list_by_ip(ip),
+        'NewTorque_list': newTorque_list
+    }
+    json_message = json.dumps(message)
+    send_udp_message(ip, UDP_PORT, json_message)
+
+
+
+# def execute_function():
+#     for _ in range(100):
+#         get_state(1)
+#
+# total_time = timeit.timeit(execute_function, number=1)
+# average_time = total_time / 100
+#
+# print(f"获取舵机位置函数执行100次的平均执行时间: {average_time:.8f} 秒")
+
+
 
 # Example usage
 # write_pos_ex(1, 0, 4000, 100)
@@ -134,8 +168,11 @@ def get_state(ID):
 # position_up(1)
 # position_down("192.168.4.2", 2)
 # set_rgb_color("192.168.4.2",0, 255, 0)
-print(get_state(1))
+# print(get_state(1))
+enable_torque("192.168.4.5", 1)
+set_torque("192.168.4.5",[100,100,100])
 
+# cProfile.run("get_state(1)")
 
 
 
