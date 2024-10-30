@@ -100,7 +100,6 @@ int SMS_STS::EnableTorque(u8 ID, u8 Enable)
 	return writeByte(ID, SMS_STS_TORQUE_ENABLE, Enable);
 }
 
-
 void SMS_STS::SetTorque(u8 ID, u16 NewTorque)
 {
     u8 lowByte = NewTorque & 0xFF;       // 获取低字节
@@ -109,6 +108,19 @@ void SMS_STS::SetTorque(u8 ID, u16 NewTorque)
     writeByte(ID, SMS_STS_TORQUE_LIMIT_H, highByte);
 }
 
+void SMS_STS::SetMode(u8 ID, u8 Mode)
+{
+	writeByte(ID, SMS_STS_MODE, Mode);
+}
+
+void SMS_STS::SetTime(u8 ID, u16 Time, u16 Direction)
+{
+	u16 newTime = Time + Direction * 1024;
+	u8 lowByte = newTime & 0xFF;       
+    u8 highByte = (newTime >> 8) & 0xFF;
+    writeByte(ID, SMS_STS_GOAL_TIME_L, lowByte);
+    writeByte(ID, SMS_STS_GOAL_TIME_H, highByte);
+}
 
 int SMS_STS::unLockEprom(u8 ID)
 {
