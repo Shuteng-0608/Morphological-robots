@@ -141,18 +141,18 @@ void handleUdp(){
       JsonArray ID_list = doc["ID_list"];
       JsonArray Time_list = doc["Time_list"];
       JsonArray Direction_list = doc["Direction_list"];
-      for (int i = 0; i < ID_list.size(); i++) st.SetTime(ID_list[i].as<u8>(), Time_list[i].as<u16>(), Direction_list[i].as<u16>());
       // Pos, Speed, Current
       StaticJsonDocument<200> jsonDoc;
       JsonArray Pos_list = jsonDoc.createNestedArray("Pos_list");
       JsonArray Speed_list = jsonDoc.createNestedArray("Speed_list");
       JsonArray Current_list = jsonDoc.createNestedArray("Current_list");
-      
       for (int i = 0; i < ID_list.size(); i++) {
+        st.SetTime(ID_list[i].as<u8>(), Time_list[i].as<u16>(), Direction_list[i].as<u16>());
         Pos_list.add(st.ReadPos(ID_list[i]));
         Speed_list[i].add(st.ReadSpeed(ID_list[i]));
         Current_list[i].add(st.ReadCurrent(ID_list[i]));
       }
+      
 
       char jsonBuffer[200];
       serializeJson(jsonDoc, jsonBuffer);
