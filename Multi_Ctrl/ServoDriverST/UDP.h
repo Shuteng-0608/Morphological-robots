@@ -90,15 +90,15 @@ void handleUdp(){
 
     else if(strcmp(cmd, "SyncWritePosEx") == 0){
       JsonArray ID_list = doc["ID_list"];
-      uint8_t IDNum = doc["IDNum"];
+      u8 IDNum = doc["IDNum"];
       JsonArray pos_list = doc["pos_list"];
       JsonArray vel_list = doc["vel_list"];
       JsonArray acc_list = doc["acc_list"];
       
-      uint8_t IDArray[ID_list.size()];
-      int16_t posArray[pos_list.size()];
-      uint16_t velArray[vel_list.size()];
-      uint8_t accArray[acc_list.size()];
+      u8 IDArray[ID_list.size()];
+      s16 posArray[pos_list.size()];
+      u16 velArray[vel_list.size()];
+      u8 accArray[acc_list.size()];
       
       for (int i = 0; i < ID_list.size(); i++) IDArray[i] = ID_list[i].as<u8>();
       for (int i = 0; i < pos_list.size(); i++) posArray[i] = pos_list[i].as<s16>();  
@@ -130,8 +130,35 @@ void handleUdp(){
     else if(strcmp(cmd, "SetTorque") == 0){
       JsonArray ID_list = doc["ID_list"];
       JsonArray NewTorque_list = doc["NewTorque_list"];
-      // SetTorque(u8 ID, u16 NewTorque)
       for (int i = 0; i < ID_list.size(); i++) st.SetTorque(ID_list[i].as<u8>(), NewTorque_list[i].as<u16>());
+    }
+    else if(strcmp(cmd, "SetMode") == 0){
+      JsonArray ID_list = doc["ID_list"];
+      u8 Mode = doc["Mode"];
+      for (int i = 0; i < ID_list.size(); i++) st.SetMode(ID_list[i].as<u8>(), Mode);
+    }
+    else if(strcmp(cmd, "SetTime") == 0){
+      JsonArray ID_list = doc["ID_list"];
+      JsonArray Time_list = doc["Time_list"];
+      JsonArray Direction_list = doc["Direction_list"];
+      for (int i = 0; i < ID_list.size(); i++) st.SetTime(ID_list[i].as<u8>(), Time_list[i].as<u16>(), Direction_list[i].as<u16>());
+      // Pos, Speed, Current
+      StaticJsonDocument<200> jsonDoc;
+      JsonArray Pos_list = jsonDoc.createNestedArray("Pos_list");
+      JsonArray Speed_list = jsonDoc.createNestedArray("Speed_list");
+      JsonArray Current_list = jsonDoc.createNestedArray("Current_list");
+      
+      for (int i = 0; i < ID_list.size(); i++) {
+        Pos_list.add(st.ReadPos(ID_list[i]));
+        Speed_list[i].add(st.ReadSpeed(ID_list[i]));
+        Current_list[i].add(st.ReadCurrent(ID_list[i]));
+      }
+
+      char jsonBuffer[200];
+      serializeJson(jsonDoc, jsonBuffer);
+      Udp.beginPacket("192.168.4.10", 12345);
+      Udp.print(jsonBuffer);
+      Udp.endPacket();  
     }
 
     else if(strcmp(cmd, "State") == 0){ 
