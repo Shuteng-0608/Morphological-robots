@@ -148,6 +148,45 @@ def set_torque(ip, newTorque_list):
     json_message = json.dumps(message)
     send_udp_message(ip, UDP_PORT, json_message)
 
+def set_mode(ip, Mode):
+    message = {
+        'Cmd': "SetMode",
+        'ID_list': query_id_list_by_ip(ip),
+        'Mode': Mode
+    }
+    json_message = json.dumps(message)
+    send_udp_message(ip, UDP_PORT, json_message)
+
+def set_time(ip, time_list, direction_list):
+    message = {
+        'Cmd': "SetTime",
+        'ID_list': query_id_list_by_ip(ip),
+        'Time_list': time_list,
+        'Direction_list': direction_list
+    }
+    json_message = json.dumps(message)
+    # send_udp_message(ip, UDP_PORT, json_message)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(("192.168.4.10", 12345))
+    sock.sendto(json_message.encode(), (ip, UDP_PORT))
+
+    # print("Cmd sent")
+    while True:
+        try:
+            data, addr = sock.recvfrom(1024)
+            decoded_data = data.decode('utf-8')
+            print(f"Received data: {decoded_data}")
+            json_data = json.loads(decoded_data)
+            pos_list = json_data["Pos_list"]
+            speed_list = json_data["Speed_list"]
+            current_list = json_data["Current_list"]
+
+            return pos_list, speed_list, current_list
+        except KeyboardInterrupt:
+            print("Exiting...")
+            break
+    sock.close()
+
 
 
 # def execute_function():
@@ -169,9 +208,13 @@ def set_torque(ip, newTorque_list):
 # position_down("192.168.4.2", 2)
 # set_rgb_color("192.168.4.2",0, 255, 0)
 # print(get_state(1))
-enable_torque("192.168.4.5", 1)
-set_torque("192.168.4.5",[100,100,100])
-
+# enable_torque("192.168.4.5", 1)
+# set_torque("192.168.4.5",[100,100,100])
+set_mode("192.168.4.5", 0)
+# pos_list, speed_list, current_list = set_time("192.168.4.5", [200, 200, 200], [0, 0, 0])
+# print("Pos_list: ", pos_list)
+# print("Speed_list: ", speed_list)
+# print("Current_list: ", current_list)
 # cProfile.run("get_state(1)")
 
 
