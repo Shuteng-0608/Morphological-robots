@@ -7,9 +7,9 @@ import timeit
 # List of ESP32 IP addresses
 ESP32_IPS = [
     "192.168.4.1", # AP
-    "192.168.4.2", # Front
-    "192.168.4.3", # Middle
-    "192.168.4.4"  # End
+    "192.168.4.2", # Head
+    "192.168.4.3", # Body
+    "192.168.4.4"  # Tail
 ]
 
 # PC IP address
